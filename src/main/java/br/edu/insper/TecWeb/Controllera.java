@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class Controllera {
-	
-	
+
 	Resources api = new Resources();
 
 	@Value("${mymessage}")
@@ -47,13 +46,24 @@ public class Controllera {
 		System.out.println(title);
 		DAO dao = new DAO();
 
-		dao.adiciona(
-				new Note(bg, title.replace("\t", "").replace("\n", " "), content.replace("\t", "").replace("\n", " "),
-						new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+		Integer id = -1;
+
+		if (content.replace("\t", "").replace("\n", "").replace("<br>", "").equals("")) {
+			id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
+					api.redditAPI("1", title.replace("\t", "").replace("\n", " ")),
+					new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+
+		} else {
+			System.out.println("nadia" + content.replace("\t", "").replace("\n", "").replace("<br>", "") + 123);
+			id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
+					content.replace("\t", "").replace("\n", " "), new Date(System.currentTimeMillis()),
+					new Date(System.currentTimeMillis())));
+		}
 
 		dao.close();
-		
-		return "Note " + title.toString() + " adicionada com o id " + "id";
+
+		return "Note " + title.toString() + " adicionada com o id " + id;
+
 	}
 
 	@PutMapping("/note")
@@ -67,7 +77,7 @@ public class Controllera {
 			dao.atualiza(new Note(bg, title.replace("\t", "").replace("\n", " "),
 					content.replace("\t", "").replace("\n", " "), new Date(System.currentTimeMillis()),
 					new Date(System.currentTimeMillis())), id);
-		
+
 		dao.close();
 
 		return "Note " + title.toString() + " atualizada com o id " + id;
@@ -75,7 +85,7 @@ public class Controllera {
 
 	@DeleteMapping("/note/{id}")
 	@ResponseBody
-	public String deleteNote(@PathVariable(value="id") Integer id) {
+	public String deleteNote(@PathVariable(value = "id") Integer id) {
 
 		DAO dao = new DAO();
 
@@ -85,18 +95,12 @@ public class Controllera {
 	}
 
 	// ---------------
-	
-	
-	
-	
-	
-	
 
 	@GetMapping("/ResponseString")
 	@ResponseBody
 	public String responseString() {
 
-		return api.redditAPI("1", "1");
+		return api.redditAPI("1", "");
 	}
 
 }

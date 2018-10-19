@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.jdbc.Statement;
+
 public class DAO {
 	
 	private int loggedUser;
@@ -111,10 +113,10 @@ public class DAO {
 		}
 	}
 
-	public void adiciona(Note note) {
+	public Integer adiciona(Note note) {
 		String sql = "INSERT INTO Notes" + "(user_id,bg,title,content,creation_date,update_date) values(?,?,?,?,?,?)";
 		try {
-			PreparedStatement stmt = connection.prepareStatement(sql);
+			PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, this.loggedUser);
 			stmt.setString(2, note.getBg());
 			stmt.setString(3, note.getTitle());
@@ -122,11 +124,18 @@ public class DAO {
 			stmt.setDate(5, note.getCreationDate());
 			stmt.setDate(6, note.getUpdatedDate());
 			stmt.execute();
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			if(rs.next())
+            {
+                return rs.getInt(1);
+            }
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return -1;
 
 	}
 	

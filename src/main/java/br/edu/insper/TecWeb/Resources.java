@@ -11,6 +11,8 @@ import org.json.JSONObject;
 public class Resources {
 
 	private final String USER_AGENT = "Mozilla/5.0";
+	
+	//TODO: adicionar API de GIFS, pode ser ao checar por --GIF-- no content da nota
 
 	// www.reddit.com/r/Showerthoughts/search?q=teste&restrict_sr=1%2F.json&sort=top
 
@@ -44,11 +46,17 @@ public class Resources {
 	}
 
 	public String redditAPI(String subreddit, String search) {
-		// www.reddit.com/r/Showerthoughts/search?q=teste&restrict_sr=1%2F.json&sort=top
 
 		try {
+			JSONObject obj = null;
+			if (search != "") {
+				obj = new JSONObject(sendGet("https://www.reddit.com/r/Showerthoughts/search.json?q=" + search
+						+ "&restrict_sr=1&sort=top"));
 
-			JSONObject obj = new JSONObject(sendGet("https://www.reddit.com/r/Showerthoughts/.json"));
+			} else {
+
+				obj = new JSONObject(sendGet("https://www.reddit.com/r/Showerthoughts/.json"));
+			}
 
 			Integer numItens = obj.getJSONObject("data").getInt("dist");
 			Integer randowm = ThreadLocalRandom.current().nextInt(1, numItens);
