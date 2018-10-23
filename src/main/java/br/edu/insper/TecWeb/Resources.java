@@ -8,19 +8,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class Resources {
 
-	@Value("${gif_api_key}")
-	private String giphyKey;
-	
+	private String giphyKey = "vc0Nw9WOiRlrw46XM22Kpr0JrgxAqUGG";
+
+	@Value("${mymessage}")
+	private String message;
+
 	private final String USER_AGENT = "Mozilla/5.0";
 
 	// TODO: adicionar API de GIFS, pode ser ao checar por --GIF-- no content da
 	// nota
 
 	// www.reddit.com/r/Showerthoughts/search?q=teste&restrict_sr=1%2F.json&sort=top
-
 
 	private String sendGet(String url) throws Exception {
 
@@ -80,19 +83,23 @@ public class Resources {
 
 	public String GIF_API(String search) {
 
+		System.out.println(giphyKey + message);
+
 		try {
 			JSONObject obj = null;
 			if (search != "") {
-				obj = new JSONObject(sendGet("http://api.giphy.com/v1/gifs/random?tag=" + search + "api_key=" + giphyKey));
+				obj = new JSONObject(
+						sendGet("http://api.giphy.com/v1/gifs/random?tag=" + search + "&api_key=" + giphyKey));
 
 			} else {
 
 				obj = new JSONObject(sendGet("http://api.giphy.com/v1/gifs/random?api_key=" + giphyKey));
-			}	
-			
-			String resp = obj.getJSONObject("data").getJSONObject("images").getJSONObject("downsized_medium").getString("url");
-			
-			return resp;			
+			}
+
+			String resp = obj.getJSONObject("data").getJSONObject("images").getJSONObject("downsized_medium")
+					.getString("url");
+
+			return resp;
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

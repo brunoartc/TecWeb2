@@ -2,6 +2,7 @@ package br.edu.insper.TecWeb;
 
 import java.sql.Date;
 
+import org.eclipse.jdt.internal.compiler.ast.SynchronizedStatement;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +21,13 @@ public class Controllera {
 
 	@Value("${mymessage}")
 	private String message;
+	
+	@Value("${gif_api_key}")
+	private String gib;
 
 	@GetMapping("/")
 	public String index(Model model) {
+		System.out.println(gib);
 
 		model.addAttribute("message", message);
 		return "index.jsp";
@@ -68,11 +73,11 @@ public class Controllera {
 				finalContent = content.replace("\t", "").replace("\n", " ").substring(
 						content.replace("\t", "").replace("\n", " ").indexOf("}") + 1,
 						content.replace("\t", "").replace("\n", " ").length());
-				
+
 				gifURL = api.GIF_API(gifContent);
 
 				id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
-						initialContent + "<img src=\'" + gifURL + "'/>" + finalContent,
+						initialContent + "<img src=" + gifURL + ">" + finalContent,
 						new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
 
 			} else {
