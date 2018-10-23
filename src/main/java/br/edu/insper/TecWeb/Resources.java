@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 
 public class Resources {
 

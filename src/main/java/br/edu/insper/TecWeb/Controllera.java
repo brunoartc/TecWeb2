@@ -57,16 +57,27 @@ public class Controllera {
 					new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
 
 		} else {
-			if (content.replace("\t", "").replace("\n", " ").contains("{")==true & content.replace("\t", "").replace("\n", " ").contains("}")==true){
-				initialContent = content.replace("\t", "").replace("\n", " ").substring(0, content.replace("\t", "").replace("\n", " ").indexOf("{"));
-			    gifURL = content.replace("\t", "").replace("\n", " ").substring(content.replace("\t", "").replace("\n", " ").indexOf("{") + 1, content.replace("\t", "").replace("\n", " ").indexOf("}"));
-			    finalContent = content.replace("\t", "").replace("\n", " ").substring(content.replace("\t", "").replace("\n", " ").indexOf("}") + 2, content.replace("\t", "").replace("\n", " ").length());
+			if (content.replace("\t", "").replace("\n", " ").contains("{") == true
+					& content.replace("\t", "").replace("\n", " ").contains("}") == true) {
+				initialContent = content.replace("\t", "").replace("\n", " ").substring(0,
+						content.replace("\t", "").replace("\n", " ").indexOf("{"));
+				gifURL = content.replace("\t", "").replace("\n", " ").substring(
+						content.replace("\t", "").replace("\n", " ").indexOf("{") + 1,
+						content.replace("\t", "").replace("\n", " ").indexOf("}"));
+				finalContent = content.replace("\t", "").replace("\n", " ").substring(
+						content.replace("\t", "").replace("\n", " ").indexOf("}") + 2,
+						content.replace("\t", "").replace("\n", " ").length());
+
+				id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
+						initialContent + "<img src=\'" + gifURL + "'/>" + finalContent,
+						new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())));
+
+			} else {
+				id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
+						content.replace("\t", "").replace("\n", " "), new Date(System.currentTimeMillis()),
+						new Date(System.currentTimeMillis())));
 			}
-			
-			
-			id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
-					initialContent + "<img src=\'" +gifURL +"'/>"+ finalContent, new Date(System.currentTimeMillis()),
-					new Date(System.currentTimeMillis())));
+
 		}
 
 		dao.close();
