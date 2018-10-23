@@ -48,8 +48,9 @@ public class Controllera {
 
 		Integer id = -1;
 		String initialContent = "";
-		String gifURL = "";
+		String gifContent = "";
 		String finalContent = "";
+		String gifURL = "";
 
 		if (content.replace("\t", "").replace("\n", "").replace("<br>", "").equals("")) {
 			id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
@@ -61,12 +62,14 @@ public class Controllera {
 					& content.replace("\t", "").replace("\n", " ").contains("}") == true) {
 				initialContent = content.replace("\t", "").replace("\n", " ").substring(0,
 						content.replace("\t", "").replace("\n", " ").indexOf("{"));
-				gifURL = content.replace("\t", "").replace("\n", " ").substring(
+				gifContent = content.replace("\t", "").replace("\n", " ").substring(
 						content.replace("\t", "").replace("\n", " ").indexOf("{") + 1,
 						content.replace("\t", "").replace("\n", " ").indexOf("}"));
 				finalContent = content.replace("\t", "").replace("\n", " ").substring(
-						content.replace("\t", "").replace("\n", " ").indexOf("}") + 2,
+						content.replace("\t", "").replace("\n", " ").indexOf("}") + 1,
 						content.replace("\t", "").replace("\n", " ").length());
+				
+				gifURL = api.GIF_API(gifContent);
 
 				id = dao.adiciona(new Note(bg, title.replace("\t", "").replace("\n", " "),
 						initialContent + "<img src=\'" + gifURL + "'/>" + finalContent,
