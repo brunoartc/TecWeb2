@@ -10,11 +10,16 @@ import org.json.JSONObject;
 
 public class Resources {
 
-	private final String USER_AGENT = "Mozilla/5.0";
+	@Value("${gif_api_key}")
+	private String giphyKey;
 	
-	//TODO: adicionar API de GIFS, pode ser ao checar por --GIF-- no content da nota
+	private final String USER_AGENT = "Mozilla/5.0";
+
+	// TODO: adicionar API de GIFS, pode ser ao checar por --GIF-- no content da
+	// nota
 
 	// www.reddit.com/r/Showerthoughts/search?q=teste&restrict_sr=1%2F.json&sort=top
+
 
 	private String sendGet(String url) throws Exception {
 
@@ -50,8 +55,8 @@ public class Resources {
 		try {
 			JSONObject obj = null;
 			if (search != "") {
-				obj = new JSONObject(sendGet("https://www.reddit.com/r/Showerthoughts/search.json?q=" + search
-						+ "&restrict_sr=1&sort=top"));
+				obj = new JSONObject(sendGet(
+						"https://www.reddit.com/r/Showerthoughts/search.json?q=" + search + "&restrict_sr=1&sort=top"));
 
 			} else {
 
@@ -64,6 +69,29 @@ public class Resources {
 					.getJSONObject("data").getString("title");
 
 			return resp;
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return (e.toString());
+		}
+	}
+
+	public String GIF_API(String search) {
+
+		try {
+			JSONObject obj = null;
+			if (search != "") {
+				obj = new JSONObject(sendGet("http://api.giphy.com/v1/gifs/random?tag=" + search + "api_key=" + giphyKey));
+
+			} else {
+
+				obj = new JSONObject(sendGet("http://api.giphy.com/v1/gifs/random?api_key=" + giphyKey));
+			}	
+			
+			String resp = obj.getJSONObject("data").getJSONObject("images").getJSONObject("downsized_medium").getString("url");
+			
+			return resp;			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
